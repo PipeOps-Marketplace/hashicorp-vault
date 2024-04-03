@@ -1,4 +1,4 @@
-FROM vault:latest
+FROM vault:1.13.3
 
 ARG STORAGE_PATH
 ARG DEFAULT_LEASE_TTL
@@ -15,5 +15,6 @@ RUN echo "{
   \"ui\": $UI_ENABLED,
   \"disable_mlock\": true
 }" > /vault/config/config.json
+
 
 CMD if [ "$ENV" = "dev" ]; then vault server --dev; else vault server -config=/vault/config/config.json; fi
