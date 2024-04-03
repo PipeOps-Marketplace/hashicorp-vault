@@ -1,4 +1,4 @@
-FROM hashicorp/vault:1.14
+FROM hashicorp/vault:latest
 
 ARG STORAGE_PATH
 ARG DEFAULT_LEASE_TTL
