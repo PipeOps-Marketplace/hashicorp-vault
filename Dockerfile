@@ -1,21 +1,28 @@
 FROM hashicorp/vault:1.14
 
-ARG STORAGE_PATH
-ARG DEFAULT_LEASE_TTL
-ARG MAX_LEASE_TTL
-ARG UI_ENABLED
-ARG ENV=dev
+# Set environment variables
+ENV STORAGE_PATH=/vault/data
+ENV DEFAULT_LEASE_TTL=168h
+ENV MAX_LEASE_TTL=720h
+ENV UI_ENABLED=true
 
+# Create the directory for configuration files
+RUN mkdir -p /vault/config
+
+# Copy the configuration script
 COPY config.sh /config.sh
 
-RUN chmod +x /config.sh && \
-    export STORAGE_PATH=${STORAGE_PATH} && \
-    export DEFAULT_LEASE_TTL=${DEFAULT_LEASE_TTL} && \
-    export MAX_LEASE_TTL=${MAX_LEASE_TTL} && \
-    export UI_ENABLED=${UI_ENABLED} && \
-    /config.sh
+# Make the script executable and run it
+RUN chmod +x /config.sh && /config.sh
 
-
-RUN mv ./config.json /vault/config/config.json
-
-CMD if [ "$ENV" = "dev" ]; then vault server --dev; else vault server -config=/vault/config/config.json; fi
+# Create the Vault configuration file
+RUN echo " \
+{
+  \"storage\": { \"file\": { \"path\": \"${STORAGE_PATH}\" } },
+  \"listener\": [{ \"tcp\": { \"address\": \"[::]:8200\", \"tls_disable\": \"true\" } }],
+  \"default_lease_ttl\": \"${DEFAULT_LEASE_TTL}\",
+  \"max_lease_ttl\": \"${MAX_LEASE_TTL}\",
+  \"ui\": ${UI_ENABLED},
+  \"disable_mlock\": true
+}
+" > /vault/config/config.json
