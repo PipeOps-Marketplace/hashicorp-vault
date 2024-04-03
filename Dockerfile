@@ -6,12 +6,6 @@ ARG MAX_LEASE_TTL
 ARG UI_ENABLED
 ARG ENV=dev
 
-COPY config.sh /config.sh
-
-# Make config.sh executable and execute it
-RUN chmod +x /config.sh && \
-    /config.sh
-
 # Create the config.json file
 RUN echo "{
   \"storage\": { \"file\": { \"path\": \"$STORAGE_PATH\" } },
