@@ -15,4 +15,7 @@ RUN chmod +x /config.sh && \
     export UI_ENABLED=${UI_ENABLED} && \
     /config.sh
 
+
+RUN mv ./config.json /vault/config/config.json
+
 CMD if [ "$ENV" = "dev" ]; then vault server --dev; else vault server -config=/vault/config/config.json; fi
