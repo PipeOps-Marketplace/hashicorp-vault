@@ -15,7 +15,7 @@ ENV UI_ENABLED=$UI_ENABLED
 ENV ENV=$ENV
 
 # Create the necessary directory structure
-RUN mkdir -p $STORAGE_PATH/vault/file/data
+RUN mkdir -p vault/file
 
 # Copy the Vault configuration file
 COPY config.hcl /config.hcl
