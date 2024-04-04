@@ -16,7 +16,6 @@ RUN mkdir -p $STORAGE_PATH
 
 RUN mkdir -p ./vault/file/data
 
-
 COPY config.hcl ./config.hcl
 
 CMD vault server -config=config.hcl
