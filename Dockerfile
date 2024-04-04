@@ -11,5 +11,3 @@ ENV DEFAULT_LEASE_TTL = $DEFAULT_LEASE_TTL
 ENV MAX_LEASE_TTL = $MAX_LEASE_TTL
 ENV UI_ENABLED = $UI_ENABLED
 ENV ENV = $ENV
-
-CMD if [ "$ENV" = "dev" ]; then vault server --dev; else vault server -config=/vault/config/config.json; fi
