@@ -19,3 +19,5 @@ RUN mkdir -p vault/file
 
 # Copy the Vault configuration file
 COPY config.hcl /config.hcl
+
+CMD vault server -config=config.hcl
