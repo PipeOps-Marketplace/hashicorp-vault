@@ -19,6 +19,3 @@ RUN mkdir -p vault/file
 
 # Copy the Vault configuration file
 COPY config.hcl /config.hcl
-
-# Start Vault server with the provided configuration
-CMD ["vault", "server", "-config=/config.hcl", "--cap-add", "IPC_LOCK"]
