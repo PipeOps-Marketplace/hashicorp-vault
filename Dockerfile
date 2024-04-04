@@ -21,4 +21,4 @@ RUN mkdir -p $STORAGE_PATH/vault/file/data
 COPY config.hcl /config.hcl
 
 # Start Vault server with the provided configuration
-CMD ["vault", "server", "-config=/config.hcl"]
+CMD ["vault", "server", "-config=/config.hcl", "--cap-add", "IPC_LOCK"]
