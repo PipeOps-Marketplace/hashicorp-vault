@@ -14,7 +14,7 @@ ENV ENV = $ENV
 
 RUN mkdir -p $STORAGE_PATH
 
-RUN mkdir -p 
+RUN mkdir -p ./vault/file/data
 
 
 COPY config.hcl ./config.hcl
