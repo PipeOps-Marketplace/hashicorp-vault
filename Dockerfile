@@ -11,3 +11,10 @@ ENV DEFAULT_LEASE_TTL = $DEFAULT_LEASE_TTL
 ENV MAX_LEASE_TTL = $MAX_LEASE_TTL
 ENV UI_ENABLED = $UI_ENABLED
 ENV ENV = $ENV
+
+RUN mkdir -p $STORAGE_PATH
+
+COPY config.hcl ./config.hcl
+
+CMD vault server -config=config.hcl
+
