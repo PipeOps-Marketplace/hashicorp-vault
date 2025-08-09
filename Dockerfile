@@ -1,23 +1,27 @@
-FROM vault:1.13.3
+FROM hashicorp/vault:1.19
 
-# Define build arguments
 ARG STORAGE_PATH
 ARG DEFAULT_LEASE_TTL
 ARG MAX_LEASE_TTL
 ARG UI_ENABLED
 ARG ENV=dev
+ARG DEV_ROOT_TOKEN_ID
 
-# Set environment variables
-ENV STORAGE_PATH=$STORAGE_PATH
-ENV DEFAULT_LEASE_TTL=$DEFAULT_LEASE_TTL
-ENV MAX_LEASE_TTL=$MAX_LEASE_TTL
-ENV UI_ENABLED=$UI_ENABLED
-ENV ENV=$ENV
+COPY config.sh /config.sh
 
-# Create the necessary directory structure
-RUN mkdir -p vault/file
+RUN chmod +x /config.sh && \
+    export STORAGE_PATH=${STORAGE_PATH} && \
+    export DEFAULT_LEASE_TTL=${DEFAULT_LEASE_TTL} && \
+    export MAX_LEASE_TTL=${MAX_LEASE_TTL} && \
+    export UI_ENABLED=${UI_ENABLED} && \
+    /config.sh
 
-# Copy the Vault configuration file
-COPY config.hcl /config.hcl
+RUN mv ./config.json /vault/config/config.json
 
-CMD vault server -config=config.hcl
+CMD if [ "$ENV" = "dev" ]; then \
+    VAULT_DEV_LISTEN_ADDRESS="[::]:8200" \
+    VAULT_DEV_ROOT_TOKEN_ID=${DEV_ROOT_TOKEN_ID} \
+    vault server --dev; \
+    else \
+    vault server -config=/vault/config/config.json; \
+    fi
